@@ -1,0 +1,35 @@
+from .tasks import app
+
+# monitor/tasks.py
+from celery import Celery
+from datetime import datetime
+
+app = Celery('monitor', broker='redis://localhost:6379/0')
+
+@app.task
+def analyze_message(message):
+    offensive_words = ['faggot', 'slur', 'ass']
+    violations = [word for word in offensive_words if word in message.lower()]
+    
+    if violations:
+        print(f"\nViolation Detected! {datetime.now()}")
+        print(f"Message: {message}")
+        print(f"Violations: {', '.join(violations)}")
+        return True
+    return False
+
+# run_monitor.py
+import time
+from monitor.tasks import analyze_message
+
+def monitor_chat_log():
+    with open('chat.log', 'r') as f:
+        while True:
+            line = f.readline()
+            if line:
+                analyze_message.delay(line)
+            time.sleep(1)
+
+if __name__ == '__main__':
+    print("Monitoring chat.log...")
+    monitor_chat_log()
