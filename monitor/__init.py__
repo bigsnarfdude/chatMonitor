@@ -1,0 +1,4 @@
+from .deberta_v3 import InjectionClassifier
+from .llama2 import InjectionClassifier
+
+injection_classifier = InjectionClassifier()
