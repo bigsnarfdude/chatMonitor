@@ -1,7 +1,7 @@
 # rewrite_prompts.py
 
 
-from llama2 import LlamaClassifier
+from models.llama2 import LlamaClassifier
 import sys
 
 def main():
