@@ -13,8 +13,8 @@ tokenizer = AutoTokenizer.from_pretrained(model_name)
 text_generator = pipeline(
     task="text-generation",
     model=model_name,
-    torch_dtype=torch.float32,
-    device_map="mps"
+    torch_dtype=torch.float16,
+    device_map="cuda"
 )
 
 # File paths
@@ -31,7 +31,7 @@ with open(input_file, "r") as infile, open(output_file, "w") as outfile:
             
             # Generate the prompt using the tokenizer's chat template
             prompt = tokenizer.apply_chat_template(
-                messages=messages, 
+                conversation=messages, 
                 tokenize=False, 
                 add_generation_prompt=True
             )
